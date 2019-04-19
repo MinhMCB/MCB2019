@@ -1,0 +1,234 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset= utf-8" />
+        <title>MCB2019/Ss_5</title>
+        <link rel="shortcut icon" href="photos/akiki.jpg">
+        <link rel="stylesheet" href="style.css">
+	<script type="text/javascript" src="static/Chart.min.js"></script>
+	<script language="javascript" src="static/jquery-3.4.0.min.js"></script>
+	<script language="javascript">
+            function load_ajax_text()
+	    {
+		var LOAD = 30;	//load #0 
+		$.ajax({
+			url : "test5.php",
+			type : "post",
+			dataType:"text",
+			data : {
+				Sensor5 : LOAD
+				},
+			success : function (result){
+				var data = JSON.parse(result);
+				$('#Temp_now').html(data.temp[data.time.length - 1] );
+				$('#Hum_now').html(data.hum[data.time.length - 1]);	
+				
+		        			}
+		        });    
+		}
+        </script>
+
+    </head>
+    <body>
+        <div id="dau">
+	    <table>
+		<tr>
+            		<td><a href="../index.html">Home</a></td>
+            		<td><a href="Address1.html">Address1</a></td>
+            		<td><a href="Address2.html">Address2</a></td>
+           		<td><a href="Address3.html">Address3</a></td>
+            		<td><a href="Address4.html">Address4</a></td>
+            		<td><a href="Address5.html">Address5</a></td>
+		</tr>
+            </table>
+        </div>
+	<div id="than">
+		<b>ⓜⓐⓝⓖ ©Ảⓜ ⓑⓘẾⓝ </b>
+		<br>②⓪①⑨ </br>
+	</div>
+	<div id="cuoi"> 
+	    <div>
+	    <h2 >Dữ liệu nhận được từ cảm biến tại địa chỉ Address_5 hiện tại: </h2>
+	    <h3>
+		<li > Temperature: <font id= "Temp_now" color="FF0000" font-size="60px">*** </font>°C. </li>
+		<li > Humidity: <font id= "Hum_now" color="0000CC">*** </font>%. </li>
+	    </h3>
+        <input type="text" value="" id="number"/>
+        <input type="button" name="clickme" id="clickme" onclick="load_ajax_text()" value="Load_Sensor"/>
+	    </div>
+            <div id= "bang">
+		<style type="text/css">			
+			bang{
+			    font-family: Arial;
+			    margin:;
+			    padding: 0;
+			    color: ;
+			    text-align:;
+			    background:white;
+			   
+			}
+
+			.container {
+				color: #E8E9EB;
+				background: #222;
+				border: #555652 1px solid;
+				padding: 10px;
+			}
+		</style>
+		
+
+		<script language="javascript">
+		    function load_ajax()
+		    {
+			var LOAD = 30;	//load #0 
+		    	$.ajax({
+		            url : "test6.php",
+		            type : "post",
+		            dataType:"text",
+		            data : {
+		                 Sensor5 : LOAD
+		            },
+		            success : function (result){
+		                //$('#result').html(result);
+				var data = JSON.parse(result);
+
+		                /*- Create object tmp_data to save data -*/
+		                var tmp_data = {
+		                temp: [],
+		                hum: [],
+		                time: []
+		                };
+
+		                /*- Use 15 value final of table -*/
+		                if(data.time.length>50) {
+		                    for(var i=data.time.length-50; i<data.time.length; i++) 
+				    {   // Add value to tmp_data                            
+		                	tmp_data.temp.push(data.temp[i]);
+		                	tmp_data.hum.push(data.hum[i]);
+		                	tmp_data.time.push(data.time[i]);
+		                    }
+		                }
+		                else {
+		                    tmp_data = data;
+		                }
+				//var data = JSON.stringify(tmp_data.hum);
+
+				/* -	         console.log(tmp_data);
+		        	/*--------------------------------------------------------*/
+		                /*- Update Chart -*/
+		        	myChart.data.labels = tmp_data.time;
+		        	myChart.data.datasets[0].data = tmp_data.temp;
+		        	myChart.data.datasets[1].data = tmp_data.hum;
+		        	myChart.update()	
+				
+		            }
+		        });    
+		    }
+		setInterval(load_ajax,1000);
+        </script> 
+	    <div class="container">	
+	    <h2>BẢNG CẬP NHẬT THÔNG SỐ CỦA SENSOR </h2>            
+			<canvas id="chart" style="width: 100%; height: 65vh; background: #222; border: 1px solid #555652; margin-top: 10px;"></canvas>
+
+			<script>
+				var ctx = document.getElementById("chart").getContext('2d');
+    			var myChart = new Chart(ctx, {
+        		type: 'line',
+		        data: {
+		            labels: [],
+		            datasets: 
+		            [{
+		                label: 'Temperature ',
+				yAxisID: 'val_temp',
+		                data: [],
+		                backgroundColor: 'transparent',
+		                borderColor:'rgba(255,99,132)',
+		                borderWidth: 2
+		            },
+
+		            {
+		            	label: 'Humidity',
+				yAxisID: 'val_hum',
+		                data: [],
+		                backgroundColor: 'transparent',
+		                borderColor:'rgba(0,255,255)',
+		                borderWidth: 2	
+		            }]
+		        },
+		     
+		       options: {
+		            scales: {scales:{yAxes: [{beginAtZero: false}], xAxes: [{autoskip: true, maxTicketsLimit: 20}]}},
+		            tooltips:{mode: 'index'},
+		            legend:{display: true, position: 'top', labels: {fontColor: 'rgb(255,255,255)', fontSize: 16}},
+		title: {
+		    display: true,                      // Show title
+		    text: "ADDRESS_5",               // Text of title
+		    fontSize: 30,                       // Size of title
+		    fontColor: ['rgb(0, 255, 0)'],      // Color of title
+		    fontStyle: "bold"                   // Style of title
+		},
+		scales: {
+		    /**/
+		    xAxes : [{                          // Ox
+		        gridLines : {                   // Grid
+		            display : true
+		        },
+		        ticks: {
+		            autoSkip: true,
+		            maxTicksLimit: 20           // Max label show on Chart = 20
+		        },
+		        scaleLabel: {                   // Label of Ox
+		            display: true,
+		            labelString: "Date_and_Time",
+		            fontSize: 35,
+		            fontColor: ['#F5F5F5']
+		        }
+		    }],
+		    /**/
+		    yAxes: [{                           // Oy
+		        id: "val_temp",
+		        position: 'left',
+		        type: 'linear',					
+		        scaleLabel: {                   // Label of Oy
+		            display: true,
+		            labelString: "Temperature",
+		            fontSize: 30,
+		            fontColor: 'rgba(255,99,132)',
+		        },             
+		        ticks: {
+		            min: 15,
+		            max: 35
+		        }
+		    },
+		    {
+		        id: "val_hum",
+		        position: 'right',
+		        type: 'linear',					
+		        scaleLabel: {                   // Label of Oy
+		            display: true,
+		            labelString: "Humidity",
+		            fontSize: 30,
+		            fontColor: 'rgba(0,255,255)'
+		        }                
+		    }]
+		}
+				}
+		    });
+			</script>
+	    </div>
+		
+	    </div>
+	  
+
+
+	</div>
+        <div id="dinh">
+	    <ul>
+		<li> Họ và Tên: Nguyễn Thanh Minh </li>
+		<li> Mã sinh viên: B14DCDT163 </li>
+	    </ul>
+	</div>
+	
+	
+    </body>
+</html>
